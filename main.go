@@ -270,8 +270,6 @@ func signup(username string, password string, email string) (string, error) {
 
 func verify(tokenID string) error {
 
-	fmt.Println("verifying")
-
 	hashedTokenID, err := hash.HashString(tokenID)
 
 	if err != nil {
@@ -324,10 +322,10 @@ func main() {
 	appPassword = os.Getenv("appPassword")
 
 	if appPassword == "" {
-		panic("app password was not assigned")
+		panic("app password was not assigned \n hint : use $env:appPassword = 'put your app password here'")
 	}
 
-	fmt.Println("is it really running at this point ? ")
+	app.Static("/static", "./static")
 
 	app.Post("/login", func(c *fiber.Ctx) error {
 
@@ -464,8 +462,6 @@ func main() {
 		if Token == "" {
 			return c.Redirect("/forgotPassword?message=shouldn't+be+blank")
 		}
-
-		fmt.Println("hello i am here ")
 
 		if err := verify(Token); err != nil {
 			if err == gorm.ErrRecordNotFound {
