@@ -2,15 +2,20 @@
   box-sizing: content-box;
 }
 
+
+
 body {
   text-align: left;
-
-  font-family: "Almarai", sans-serif !important;
+  direction: ltr;
   margin: 0;
   height: 100vh;
   background: radial-gradient(circle at 20% 20%, #1e293b, #020617 60%);
   overflow: hidden;
+  color: white;
 }
+
+
+
 
 body::before {
   content: "";
@@ -32,19 +37,87 @@ body::after {
   width: 500px;
   height: 500px;
   background: #9333ea;
-  filter: blur(300px);
+  filter: blur(200px);
   opacity: 0.2;
   bottom: -150px;
   right: -150px;
 }
 
-form {
-  width: 30rem;
-  border-radius: 12px;
-  padding: 20px;
-  background-color: rgb(15, 15, 26);
-  color: white;
+.button {
+  border: 2px solid rgb(18, 18, 34);
+  letter-spacing: 2px;
+  padding: 7px;
+  border-radius: 9px;
+  background: linear-gradient(112deg, rgb(55, 147, 239), rgb(99, 22, 181));
+  transition: all 0.5s ease;
+}
+
+.button:hover {
+  box-shadow: 1px 1px 1px 1px rgb(87, 87, 175);
+  backdrop-filter: blur(20px);
+  transform: scale(1.04);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.Statistics {
+  margin: 5px;
+  font-size: larger;
+}
+
+.Home {
+  margin: 3px;
+  font-size: larger;
+  transition: all 0.3s ease;
+}
+
+.Home:hover {
+  box-shadow: 1px 1px 1px 1px white;
+  transform: scale(1.02);
+  padding: 0;
+  margin: 0;
+}
+
+
+.title {
+  text-align: center;
+  margin: 6rem;
+  font-family: system-ui;
+  ;
+}
+
+h6 {
+  color: gray;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(134deg, rgb(168, 245, 255), rgb(160, 160, 255));
+  box-shadow: 0 0 5px rgb(191, 229, 241),
+    0 0 15px white,
+    0 0 30px rgb(162, 162, 255);
   position: relative;
+  bottom: 15px;
+}
+
+.input {
+  width: 50rem;
+  color: rgb(255, 255, 255);
+  height: 40px;
+  width: 70rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  border-radius: 10px;
+  position: relative;
+  background-color: #1b202a;
 }
 
 @property --angle {
@@ -53,26 +126,26 @@ form {
   inherits: false;
 }
 
-form::after,
-form::before {
+.input::after,
+.input::before {
   content: "";
   position: absolute;
   height: 100%;
   width: 100%;
-  background: conic-gradient(from var(--angle), transparent 80%, #6b6bff, purple, blue, lightblue);
+  background: conic-gradient(from var(--angle), transparent 70%, #6b6bff, purple);
   top: 50%;
   left: 50%;
   translate: -50% -50%;
   z-index: -3;
   padding: 4px;
-  border-radius: 20px;
+  border-radius: 10px;
   animation: 3s spin linear infinite;
 
 }
 
-form::before {
-  filter: blur(3rem);
-  opacity: 4px;
+.input::before {
+  filter: blur(1.8rem);
+  opacity: 0.5;
 
 }
 
@@ -84,20 +157,4 @@ form::before {
   to {
     --angle: 360deg;
   }
-}
-
-.tx {
-  color: rgb(120, 119, 119);
-}
-
-.signUP {
-  display: flex;
-  justify-content: center;
-  margin: 10rem;
-}
-
-h1 {
-  text-align: center;
-  color: white;
-  margin-top: 3rem;
 }
