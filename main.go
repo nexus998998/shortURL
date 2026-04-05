@@ -46,6 +46,13 @@ type token struct {
 	Expires   time.Time
 }
 
+type URL struct {
+	gorm.Model
+	LongURL  string `gorm:"not null"`
+	ShortURL string `gorm:"unique;not null"`
+	UserID   int
+}
+
 func isValidEmail(email string) bool {
 	return emailRegex.MatchString(email)
 }
@@ -69,6 +76,28 @@ func sendVerificationCode(to string, code string) error {
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, "radon88998@gmail.com", "dmknwmonvmtovxnr")
 	return d.DialAndSend(m)
+}
+
+func shortenURL(url string, registered bool, userID int) (string, error) {
+
+	shortURL, err := hash.GenerateRandomString(10)
+
+	if err != nil {
+		return "", err
+	}
+
+	u := URL{
+		ShortURL: shortURL,
+		LongURL:  url,
+	}
+
+	if registered {
+		u.UserID = userID
+	}
+
+	db.Create(&u)
+
+	return shortURL, nil
 }
 
 func containsSpace(s string) bool {
@@ -314,6 +343,7 @@ func main() {
 	db.AutoMigrate(&users{})
 	db.AutoMigrate(&sessions{})
 	db.AutoMigrate(&token{})
+	db.AutoMigrate(&URL{})
 
 	engine = html.New("templates", ".html")
 
@@ -480,6 +510,32 @@ func main() {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("mainPage", nil)
+	})
+
+	app.Get("/link/:id", func(c *fiber.Ctx) error {
+		linkID := c.Params("id", "nothing")
+		var url URL
+
+		results := db.First(&url, "short_url = ? ", linkID)
+		if results.Error == gorm.ErrRecordNotFound {
+			return c.Redirect("/?message=link+not+found", fiber.StatusFound)
+		}
+
+		return c.Redirect(url.LongURL, fiber.StatusFound)
+
+	})
+
+	app.Post("/shorten", func(c *fiber.Ctx) error {
+		URLToShorten := strings.TrimSpace(c.FormValue("url"))
+		shortURL, err := shortenURL(URLToShorten, false, 0)
+		if err != nil {
+			return err
+		}
+
+		return c.Render("ViewURL", fiber.Map{
+			"ShortURL": "localhost:8080/link/" + shortURL,
+		})
+
 	})
 
 	app.Listen(":8080")
