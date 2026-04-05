@@ -325,7 +325,7 @@ func main() {
 		panic("app password was not assigned \n hint : use $env:appPassword = 'put your app password here'")
 	}
 
-	app.Static("/static", "./static")
+	app.Static("/static/", "./static")
 
 	app.Post("/login", func(c *fiber.Ctx) error {
 
@@ -476,12 +476,10 @@ func main() {
 
 	})
 
-	protected := app.Group("", authenticate)
+	// protected := app.Group("", authenticate)
 
-	protected.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("mainPage", fiber.Map{
-			"user": c.Locals("user").(users),
-		})
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("mainPage", nil)
 	})
 
 	app.Listen(":8080")
